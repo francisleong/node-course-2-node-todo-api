@@ -4,9 +4,11 @@ const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
+
 const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
+const {authenticate} = require('./middleware/authenticate');
 
 
 const app = express();
@@ -110,6 +112,9 @@ app.post('/users', (req, res) => {
   })
 });
 
+app.get('/users/me/', authenticate, (req, res) => {
+  res.send(req.user);
+});
 
 app.listen(port, () => {
   console.log(`Started up at port ${port}`);
